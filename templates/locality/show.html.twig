@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche d'une Locality{% endblock %}
+
+{% block body %}
+
+<h1>{{ locality.PostalCode }} {{ locality.locality | capitalize}}</h1>
+
+<ul>
+{% for location in locality.locations %}
+    <li>{{ location.designation }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
