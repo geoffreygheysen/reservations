@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Localities{% endblock %}
+
+{% block body %}
+
+<h1>Liste des {{ressource}}</h1>
+
+<ul>
+{% for locality in localities %}
+    <li>{{ locality.locality }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

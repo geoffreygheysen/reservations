@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Roles{% endblock %}
+
+{% block body %}
+
+<h1>Liste des {{ressource}}</h1>
+
+<ul>
+{% for role in roles %}
+    <li>{{ role.role }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

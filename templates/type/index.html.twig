@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Types{% endblock %}
+
+{% block body %}
+
+<h1>Liste des {{ressource}}</h1>
+
+<ul>
+{% for type in types %}
+    <li>{{ type.type }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
