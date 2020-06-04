@@ -60,6 +60,8 @@ class LocationFixtures extends Fixture implements DependentFixtureInterface
             $location->setPhone($record['phone']);
 
             $manager->persist($location);
+
+            $this->addReference($location->getSlug(), $location);
         }
 
         $manager->flush();

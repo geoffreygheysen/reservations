@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LocationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -51,6 +53,16 @@ class Location
      * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $phone;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Show::class, mappedBy="location")
+     */
+    private $shows;
+
+    public function __construct()
+    {
+        $this->shows = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,6 +137,37 @@ class Location
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Show[]
+     */
+    public function getShows(): Collection
+    {
+        return $this->shows;
+    }
+
+    public function addShow(Show $show): self
+    {
+        if (!$this->shows->contains($show)) {
+            $this->shows[] = $show;
+            $show->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShow(Show $show): self
+    {
+        if ($this->shows->contains($show)) {
+            $this->shows->removeElement($show);
+            // set the owning side to null (unless already changed)
+            if ($show->getLocation() === $this) {
+                $show->setLocation(null);
+            }
+        }
 
         return $this;
     }
