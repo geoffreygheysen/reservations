@@ -1,0 +1,6 @@
+{
+    "html.format.contentUnformatted": "",
+    "html.format.indentInnerHtml": true,
+    "html.format.endWithNewline": true,
+    "html-css-class-completion.enableEmmetSupport": true
+}
