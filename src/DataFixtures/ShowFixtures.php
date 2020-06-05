@@ -60,11 +60,15 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
             $show->setTitle($record['title']);
             $show->setDescription($record['description']);
             $show->setPosterUrl($record['poster_url']);
+
             if ($record['location_slug']) {
                 $show->setLocation($this->getReference($record['location_slug']));
             }
+
             $show->setBookable($record['bookable']);
             $show->setPrice($record['price']);
+
+            $this->addReference($show->getSlug(), $show);
 
             $manager->persist($show);
 
