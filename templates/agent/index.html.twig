@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Agent{% endblock %}
+
+{% block body %}
+
+<h1>liste des {{ ressource }}</h1>
+
+<ul>
+{% for agent in agents %}
+    <li>{{agent.name}}
+        <ul>
+        {% for artist in agent.artists %}
+            <li>{{artist.firstname}} {{artist.lastname}}</li>
+        {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

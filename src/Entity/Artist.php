@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ArtistRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity(repositoryClass=ArtistRepository::class)
@@ -27,6 +28,12 @@ class Artist
      * @ORM\Column(type="string", length=60)
      */
     private $lastname;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Agent::class, inversedBy="artists")
+     * @JoinColumn(onDelete="RESTRICT")
+     */
+    private $agent;
 
     public function getId(): ?int
     {
@@ -53,6 +60,18 @@ class Artist
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getAgent(): ?Agent
+    {
+        return $this->agent;
+    }
+
+    public function setAgent(?Agent $agent): self
+    {
+        $this->agent = $agent;
 
         return $this;
     }

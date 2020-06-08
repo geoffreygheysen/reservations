@@ -9,9 +9,17 @@
 <ul>
 {% for show in shows %}
     <li>{{ show.title}}
-    {% if show.bookable %}
-        <span style="font-weight: bold;">{{show.price}} $</span>
-    {% endif %}
+        {% if show.bookable %}
+            <span style="font-weight: bold;">{{show.price}} $</span>
+        {% endif %}
+
+        {% if show.representations|length==1 %}
+            - <span>1 représentation</span>
+        {% elseif show.representations|length>1 %}
+            - <span>{{show.representations|length}} représentation</span>
+        {% else %}
+            - <em>aucune représentation</em>
+        {% endif %}
     </li>
 {% endfor %}
 </ul>
