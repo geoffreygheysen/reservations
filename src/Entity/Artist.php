@@ -38,7 +38,7 @@ class Artist
     private $agent;
 
     /**
-     * @ORM\OneToMany(targetEntity=Type::class, mappedBy="artist", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ArtistType::class, mappedBy="artist", orphanRemoval=true)
      */
     private $types;
 

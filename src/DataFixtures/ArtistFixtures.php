@@ -57,13 +57,13 @@ class ArtistFixtures extends Fixture implements DependentFixtureInterface
             if (!empty($record['agent'])) {
                 $artist->setAgent($this->getReference($record['agent']));
             }
-
-            $manager->persist($artist);
-
+            
             $this->addReference(
                 $record['firstname']."-".$record['lastname'],
                 $artist
             );
+
+            $manager->persist($artist);
 
         }
 

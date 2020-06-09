@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ArtistTypeRepository::class)
- * @ORM\Table(name="artist_type", uniqueConstraints={
+ * @ORM\Table(name="artist_type",uniqueConstraints={
  * @UniqueConstraint(name="artist_type_idx", columns={"artist_id", "type_id"})})
  * @UniqueEntity(
  *  fields={"artist", "type"},

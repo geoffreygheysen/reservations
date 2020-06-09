@@ -26,7 +26,7 @@ class Type
     private $type;
 
     /**
-     * @ORM\OneToMany(targetEntity=Artist::class, mappedBy="type", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ArtistType::class, mappedBy="type", orphanRemoval=true)
      */
     private $artists;
 
