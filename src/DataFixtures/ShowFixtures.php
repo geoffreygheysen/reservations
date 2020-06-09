@@ -21,6 +21,7 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> 'espace-delvaux-la-venerie',
                 'bookable'=> true,
                 'price'=> 8.50,
+                'category'=> 'Comédie',
             ],
             [
                 'slug'=> null,
@@ -30,6 +31,7 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> 'dexia-art-center',
                 'bookable'=> true,
                 'price'=> 9.00,
+                'category'=> 'Drame',
             ],
             [
                 'slug'=> null,
@@ -39,6 +41,7 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> null,
                 'bookable'=> false,
                 'price'=> 5.50,
+                'category'=> 'Familiale',
             ],
             [
                 'slug'=> null,
@@ -48,6 +51,7 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> 'la-samaritaine',
                 'bookable'=> true,
                 'price'=> 10.50,
+                'category'=> 'Comédie',
             ],
         ];
 
@@ -67,6 +71,7 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
 
             $show->setBookable($record['bookable']);
             $show->setPrice($record['price']);
+            $show->setCategory($this->getReference($record['category']));
 
             $this->addReference($show->getSlug(), $show);
 
@@ -80,6 +85,7 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies() {
         return [
             LocationFixtures::class,
+            CategoryFixtures::class,
         ];
     }
 }
