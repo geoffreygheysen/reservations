@@ -62,6 +62,51 @@ class ArtistTypeFixtures extends Fixture implements DependentFixtureInterface
                 'artist_lastname'=> 'Caron',
                 'type'=> 'comédien',
             ],
+            [
+                'artist_firstname'=>'Élena',
+                'artist_lastname'=>'Perez',
+                'type'=>'comédien',
+            ],
+            [
+                'artist_firstname'=>'Guillaume',
+                'artist_lastname'=>'Alexandre',
+                'type'=>'comédien',
+            ],
+            [
+                'artist_firstname'=>'Claude',
+                'artist_lastname'=>'Semal',
+                'type'=>'auteur',
+            ],
+            [
+                'artist_firstname'=>'Laurence',
+                'artist_lastname'=>'Warin',
+                'type'=>'scénographe',
+            ],
+            [
+                'artist_firstname'=>'Claude',
+                'artist_lastname'=>'Semal',
+                'type'=>'comédien',
+            ],
+            [
+                'artist_firstname'=>'Pierre',
+                'artist_lastname'=>'Wayburn',
+                'type'=>'auteur',
+            ],
+            [
+                'artist_firstname'=>'Gwendoline',
+                'artist_lastname'=>'Gauthier',
+                'type'=>'auteur',
+            ],
+            [
+                'artist_firstname'=>'Pierre',
+                'artist_lastname'=>'Wayburn',
+                'type'=>'comédien',
+            ],
+            [
+                'artist_firstname'=>'Gwendoline',
+                'artist_lastname'=>'Gauthier',
+                'type'=>'comédien',
+            ],
         ];
 
         foreach ($artistTypes as $record) {
@@ -77,11 +122,17 @@ class ArtistTypeFixtures extends Fixture implements DependentFixtureInterface
             $at->setArtist($artist);
             $at->setType($type);
 
+            $this->addReference(
+                $record['artist_firstname']
+                .'-'.$record['artist_lastname']
+                .'-'.$record['type'], $at);
+
             $manager->persist($at);
         }
 
         $manager->flush();
     }
+
     public function getDependencies() {
         return [
             ArtistFixtures::class,

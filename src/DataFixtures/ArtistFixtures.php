@@ -47,6 +47,36 @@ class ArtistFixtures extends Fixture implements DependentFixtureInterface
                 'lastname'=>'Caron',
                 'agent'=>'bob@sull.be',
             ],
+            [
+                'firstname'=>'Élena',
+                'lastname'=>'Perez',
+                'agent'=>'bob@sull.be',
+            ],
+            [
+                'firstname'=>'Guillaume',
+                'lastname'=>'Alexandre',
+                'agent'=>'bob@sull.be',
+            ],
+            [
+                'firstname'=>'Claude',
+                'lastname'=>'Semal',
+                'agent'=>'bob@sull.be',
+            ],
+            [
+                'firstname'=>'Laurence',
+                'lastname'=>'Warin',
+                'agent'=>'bob@sull.be',
+            ],
+            [
+                'firstname'=>'Pierre',
+                'lastname'=>'Wayburn',
+                'agent'=>'bob@sull.be',
+            ],
+            [
+                'firstname'=>'Gwendoline',
+                'lastname'=>'Gauthier',
+                'agent'=>'fred@sull.be',
+            ],
         ];
 
         foreach ($artists as $record) {
