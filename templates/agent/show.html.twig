@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Agent{% endblock %}
+
+{% block body %}
+
+<h1>Bienvenue {{ agent.name }}</h1>
+
+<h2>Vos artistes</h2>
+{% if agent.artists|length>=1 %}
+    <ul>
+    {% for artist in agent.artists %}
+        <li>{{artist.firstname}} {{artist.lastname}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Pas d'artistes</p>
+{% endif %}
+
+
+{% endblock %}

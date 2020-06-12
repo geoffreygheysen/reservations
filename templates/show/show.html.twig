@@ -13,6 +13,8 @@
         <canvas width="200" height="100" border="1px solid #000000"></canvas>
     {% endif %}
 
+    <p><strong>Description: </strong>{{ show.description | capitalize }}</p>
+
     <p><strong>Catégorie: </strong>{{ show.category.category | capitalize }}</p>
 
     {% if show.location %}
@@ -38,6 +40,41 @@
         <p>Aucune représentation</p>
     {% endif %}
 
+    <h2>Liste des artistes</h2>
 
+    <p><strong>Auteur: </strong>
+    {% for auteur in collaborateurs['auteur'] %}
+        {{auteur.firstname}}
+        {{auteur.lastname}}
+            {% if loop.index == loop.length-1 %}
+                et
+            {% elseif not loop.last %}
+                ,
+            {% endif %}
+    {% endfor %}
+    </p>
 
+    <p><strong>Metteur en scène: </strong>
+    {% for scenographe in collaborateurs['scénographe'] %}
+        {{scenographe.firstname}}
+        {{scenographe.lastname}}
+            {% if loop.index == loop.length-1 %}
+                et
+            {% elseif not loop.last %}
+                ,
+            {% endif %}
+    {% endfor %}
+    </p>
+
+    <p><strong>Distribution: </strong>
+    {% for comedien in collaborateurs['comédien'] %}
+        {{comedien.firstname}}
+        {{comedien.lastname}}
+            {% if loop.index == loop.length-1 %}
+                et
+            {% elseif not loop.last %}
+                ,
+            {% endif %}
+    {% endfor %}
+    </p>
 {% endblock %}

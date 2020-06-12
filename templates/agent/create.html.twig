@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un Agent{% endblock %}
+
+{% block body %}
+
+<h1>Création d'un Agent</h1>
+
+{{ form_start(formAgent) }}
+{{ form_widget(formAgent) }}
+    <button type='submit'>Enregistrer</button>
+{{ form_end(formAgent) }}
+
+{% endblock %}
