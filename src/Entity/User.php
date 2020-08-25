@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="users")
+ * @UniqueEntity(fields="login", message="This login is already taken.")
+ * @UniqueEntity(fields="email", message="This email is already taken.")
  */
-class User implements UserInterface
+class User
 {
     /**
      * @ORM\Id()
@@ -19,127 +24,55 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
-
-    /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=30, unique=true)
      */
     private $login;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=255,)
      */
-    private $firstname;
+    private $password;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $lastname;
+    private $role;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=60, nullable=true)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=60, nullable=true)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=100, unique=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=2)
      */
     private $langue;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="user", orphanRemoval=true)
      */
-    private $created_at;
+    private $reservations;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
-    {
-        return (string) $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     public function getLogin(): ?string
@@ -154,26 +87,62 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getPassword(): ?string
     {
-        return $this->firstname;
+        return $this->password;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setPassword(string $password): self
     {
-        $this->firstname = $firstname;
+        $this->password = $password;
 
         return $this;
     }
 
-    public function getLastname(): ?string
+    public function getRole(): ?Role
     {
-        return $this->lastname;
+        return $this->role;
     }
 
-    public function setLastname(string $lastname): self
+    public function setRole(?Role $role): self
     {
-        $this->lastname = $lastname;
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }
@@ -190,26 +159,55 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
+    
+    public function eraseCredentials() {
+        
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function getRoles() {
+        $role = $this->role->getRole();
+        
+        return array_unique([
+            "ROLE_USER",
+            "ROLE_".strtoupper($role)
+        ]);
+    }
+
+    public function getSalt() {
+        
+    }
+
+    public function getUsername(): string {
+        return $this->login;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
     {
-        $this->created_at = $created_at;
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setUser($this);
+        }
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function removeReservation(Reservation $reservation): self
     {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
+        if ($this->reservations->contains($reservation)) {
+            $this->reservations->removeElement($reservation);
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
 
         return $this;
     }
