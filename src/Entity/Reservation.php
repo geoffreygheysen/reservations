@@ -19,10 +19,10 @@ class Reservation
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservations")
+     * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="reservations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private $utilisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Representation::class, inversedBy="reservations")
@@ -40,14 +40,14 @@ class Reservation
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUtilisateur(): ?Utilisateur
     {
-        return $this->user;
+        return $this->utilisateur;
     }
 
-    public function setUser(?User $user): self
+    public function setUtilisateur(?Utilisateur $utilisateur): self
     {
-        $this->user = $user;
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
