@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReservationRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ReservationRepository::class)

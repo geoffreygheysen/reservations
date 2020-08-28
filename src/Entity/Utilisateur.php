@@ -152,6 +152,9 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
+    /**
+     * function indispensable pour le module security
+     */
     public function getUsername(): ?string
     {
         return $this->login;
