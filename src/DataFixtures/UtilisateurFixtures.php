@@ -5,9 +5,10 @@ namespace App\DataFixtures;
 use App\Entity\Utilisateur;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UtilisateurFixtures extends Fixture
+class UtilisateurFixtures extends Fixture implements DependentFixtureInterface
 {
     private $passwordEncoder;
 
@@ -22,6 +23,7 @@ class UtilisateurFixtures extends Fixture
             [
                 'login'=>'geoffino',
                 'password'=>'testtest',
+                'role'=>'admin',
                 'firstname'=>'geo',
                 'lastname'=>'fino',
                 'email'=>'geo@fino.com',
@@ -30,6 +32,7 @@ class UtilisateurFixtures extends Fixture
             [
                 'login'=>'johnny',
                 'password'=>'testtest',
+                'role'=>'user',
                 'firstname'=>'john',
                 'lastname'=>'doe',
                 'email'=>'john@doe.com',
@@ -41,7 +44,10 @@ class UtilisateurFixtures extends Fixture
             $utilisateur = new utilisateur();
 
             $utilisateur->setLogin($record['login']);
+
             $utilisateur->setPassword($this->passwordEncoder->encodePassword($utilisateur,$record['password']));
+            $utilisateur->setRole($this->getReference($record['role']));
+
             $utilisateur->setFirstname($record['firstname']);
             $utilisateur->setLastname($record['lastname']);
             $utilisateur->setEmail($record['email']);
@@ -53,6 +59,13 @@ class UtilisateurFixtures extends Fixture
         }
         
         $manager->flush();
+    }
+
+    public function getDependencies(): array {
+        return [
+            RoleFixtures::class,
+        ];
+        
     }
 
 }

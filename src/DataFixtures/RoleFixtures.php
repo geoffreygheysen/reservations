@@ -3,26 +3,28 @@
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Role;
 
 class RoleFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+     public function load(ObjectManager $manager)
     {
         $roles = [
             ['role'=>'admin'],
-            ['role'=>'member'],
+            ['role'=>'user'],
+           
         ];
         
-        foreach ($roles as $record) {
+        foreach($roles as $r) {
             $role = new Role();
-            $role->setRole($record['role']);
+            $role->setRole($r['role']);
+            
+            $this->addReference($r['role'], $role);
+            
             $manager->persist($role);
-
-            $this->addReference($record['role'], $role);
         }
-
+        
         $manager->flush();
     }
 }

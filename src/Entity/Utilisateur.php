@@ -61,6 +61,12 @@ class Utilisateur implements UserInterface
     public $confirm_password;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="utilisateurs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $role;
+
+    /**
      * @ORM\Column(type="string", length=2)
      */
     private $langue;
@@ -140,6 +146,18 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     public function getLangue(): ?string
     {
         return $this->langue;
@@ -198,4 +216,5 @@ class Utilisateur implements UserInterface
 
         return $this;
     }
+
 }

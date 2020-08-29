@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UtilisateurController!{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Liste des {{ressource}}</h1>
+    <ul>
+    {% for utilisateur in utilisateurs %}
+        <li>{{ utilisateur.login }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
