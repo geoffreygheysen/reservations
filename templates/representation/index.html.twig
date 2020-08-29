@@ -4,17 +4,34 @@
 
 {% block body %}
 
-<h1>Liste des {{ ressource }}</h1>
+<h1 class="display-1 my-5">Liste des {{ ressource }}</h1>
 
-<ul>
-{% for representation in representations %}
-    <li>{{ representation.theShow.title }}
-    {% if representation.theLocation %}
-    - <span>{{ representation.theLocation.designation }}</span>
-    {% endif %}
-    - <datetime>{{ representation.schedule|date('d-m-Y H:i') }}</datetime>
-    </li>
-{% endfor %}
-</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Lieux</th>
+            <th>Horaires</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for representation in representations %}
+            <tr>
+                <td>{{ representation.theShow.title}}</td>
+                <td>
+                    {% if representation.theLocation %}
+                    {{ representation.theLocation.designation }}
+                    {% else %}
+                    <span style="color:red;">Lieux non préciser<span>
+                    {% endif %}
+                </td>
+                <td>{{ representation.schedule|date('d-m-Y H:i') }}</td>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+</table>
 
 {% endblock %}

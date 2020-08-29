@@ -4,12 +4,50 @@
 
 {% block body %}
 
-<h1>Liste des {{ ressource }}</h1>
+<h1 class="display-1 my-5">Liste des {{ ressource }}</h1>
 
-<ul>
-{% for category in categories %}
-    <li>{{ category.category }}</li>
-{% endfor %}
-</ul>
+{% if categories | length>0 %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Catégorie</th>
+            <th>Spectacles</th>
+            <th>Prix</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for category in categories %}
+        <tr>
+            <td><strong>{{ category.category }}</strong> <a href="{{ path('category_edit', {'id': category.id}) }}">edit</a></td>
+
+            <td>
+                <ul>
+                {% if category.showCategory | length>0 %}
+                    {% for show in category.showCategory %}
+                        <li><a href="{{ path('show_show', {'id': show.id}) }}">{{ show.title }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <p>Aucun spectacle.</p>
+                {% endif %}   
+                </ul>
+            </td>
+            
+
+            <td>
+            {% if category.showCategory | length>0 %}
+                {% for show in category.showCategory %}
+                    <td><small>{{ show.price|number_format(2, '.', ',') }} €</small></td>
+                {% endfor %}
+            {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endif %}
+
+<a href="{{ path('category_new') }}" class="btn btn-primary">Create new</a>
 
 {% endblock %}

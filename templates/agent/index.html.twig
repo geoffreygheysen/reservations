@@ -6,16 +6,27 @@
 
 <h1>liste des {{ ressource }}</h1>
 
-<ul>
-{% for agent in agents %}
-    <li>{{agent.name}}
-        <ul>
-        {% for artist in agent.artists %}
-            <li>{{artist.firstname}} {{artist.lastname}}</li>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Agent</th>
+            <th>Artists</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for agent in agents %}
+            <tr>
+                <td>{{agent.name}}</td>
+                <td>
+                    <ul>
+                    {% for artist in agent.artists %}
+                        <li>{{artist.firstname}} {{artist.lastname}}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
         {% endfor %}
-        </ul>
-    </li>
-{% endfor %}
-</ul>
+    </tbody>
+</table>
 
 {% endblock %}
