@@ -122,12 +122,13 @@ class ArtistTypeFixtures extends Fixture implements DependentFixtureInterface
             $at->setArtist($artist);
             $at->setType($type);
 
+            $manager->persist($at);
+
             $this->addReference(
                 $record['artist_firstname']
                 .'-'.$record['artist_lastname']
                 .'-'.$record['type'], $at);
 
-            $manager->persist($at);
         }
 
         $manager->flush();

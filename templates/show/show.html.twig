@@ -3,102 +3,68 @@
 {% block title %}Fiche d'un spectacle{% endblock %}
 
 {% block body %}
-<article>
+    <article>
+        <h1>{{ show.title }}</h1>
 
-    <h1>{{ show.title }}</strong></h1>
+        {% if show.posterUrl %}
+        <p><img src="{{ asset('images/' ~ show.posterUrl) }}" alt="{{ show.title }}" width="200"></p>
+        {% else %}
+        <canvas width="200" height="100" style="border:1px solid #000000;"></canvas>
+        {% endif %}
 
-    <div class="card" style="width:18rem;float:left;margin-right: 10px;">
-
-        <figure>
-            {% if show.posterUrl %}
-            <img class="card-img-top" src="{{asset('images/' ~ show.posterUrl)}}" alt="{{ show.title }}">
-            {% else %}
-            <canvas width="200" height="100" border="1px solid #000000"></canvas>
-            {% endif %}
-            {% for auteur in collaborateurs['auteur'] %}
-            <figcaption>de {{auteur.firstname}} {{auteur.lastname}}</figcaption>
-            {% endfor %}
-        </figure>
-
-    </div>
-
-    <p><strong>Description: </strong>{{ show.description | capitalize }}</p>
-
-    <p><strong>Catégorie: </strong>{{ show.category.category | capitalize }}</p>
-
-    {% if show.location %}
-        <p><strong>Lieu de création: </strong>{{ show.location.designation }}</p>
-    {% endif %}
-
-    <p><strong>Prix: </strong>{{ show.price }} $</p>
-
-    {% if show.bookable %}
-        <p><em>réservable</em></p>
-    {% else %}
-        <p><em>non réservable</em></p>
-    {% endif %}
-
-    <hr style="clear:both; border: 0">
-
-    <h2>Liste des artistes</h2>
-
-    <p><strong>Auteur: </strong>
-    {% for auteur in collaborateurs['auteur'] %}
-        {{auteur.firstname}}
-        {{auteur.lastname}}
-            {% if loop.index == loop.length-1 %}
-                et
-            {% elseif not loop.last %}
-                ,
-            {% endif %}
-    {% endfor %}
-    </p>
-
-    <p><strong>Metteur en scène: </strong>
-    {% for scenographe in collaborateurs['scénographe'] %}
-        {{scenographe.firstname}}
-        {{scenographe.lastname}}
-            {% if loop.index == loop.length-1 %}
-                et
-            {% elseif not loop.last %}
-                ,
-            {% endif %}
-    {% endfor %}
-    </p>
-
-    <p><strong>Distribution: </strong>
-    {% for comedien in collaborateurs['comédien'] %}
-        {{comedien.firstname}}
-        {{comedien.lastname}}
-            {% if loop.index == loop.length-1 %}
-                et
-            {% elseif not loop.last %}
-                ,
-            {% endif %}
-    {% endfor %}
-    </p>
-
-    <h2>Liste des représentations</h2>
-    {% if show.representations|length>=1 %}
-    <ul>
-        {% for representation in show.representations %}
-            <li>{{representation.schedule|date('d/m/Y G:i:s')}}</li>    
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>Aucune représentation</p>
-    {% endif %}
-
-    {% if show.bookable %}
-        <a href="#" class="btn btn-primary">Réserver</a>
-    {% endif %}
+        {% if show.location %}
+        <p><strong>Lieu de création:</strong> {{ show.location.designation }}</p>
+        {% endif %}
         
-    <a href="{{ path('show') }}" class="btn btn-warning">back to list</a>
-    
-    {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('show_edit', {'id': show.id}) }}">edit</a>
+        <p><strong>Prix:</strong> {{ show.price }} €</p>
+        
+        {% if show.bookable %}
+        <p><em>Réservable</em></p>
+        {% else %}
+        <p><em>Non réservable</em></p>
+        {% endif %}
+        
+        <h2>Liste des représentations</h2>
+        {% if show.representations|length>=1 %}
+        <ul>
+            {% for representation in show.representations %}
+                <li>
+                    {{ representation.schedule|date('d/m/Y G:i:s') }}
+                    <form action="{{ path('show_show',{'id':show.id}) }}" method="post">
+                        <input type="number" id="reservation_places" name="reservation[places]">
+                        <input type="hidden" id="reservation_representation" name="reservation[representation]" 
+                               value="{{ representation.id }}">
+                        <input type="hidden" id="reservation__token" name="reservation[_token]" 
+                               value="{{ csrf_token('reservation') }}">
+                        <button class="btn btn-primary">Réserver</button>
+                    </form>
+                </li>              
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Aucune représentation</p>
+        {% endif %}
 
-    {{ include('show/_delete_form.html.twig') }}
+        <h2>Liste des artistes</h2>
+        {% if collaborateurs|length>=1 %}
+        
+        {% for key in collaborateurs|keys %}
+        <p>{{ key|capitalize }}: 
+            {% for value in collaborateurs[key] %}
+                {{ value }}{% if loop.index == loop.length-1 %} et 
+            {% elseif not loop.last %}, {% endif %}           
+            {% endfor %}
+        </p>
+        {% endfor %}
+        {% else %}
+        <p>Aucun artiste</p>
+        {% endif %}
 
-    {% endif %}
+        <a href="{{ path('show') }}">back to list</a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('show_edit', {'id': show.id}) }}">edit</a>
+
+        {{ include('show/_delete_form.html.twig') }}
+        {% endif %}
 {% endblock %}

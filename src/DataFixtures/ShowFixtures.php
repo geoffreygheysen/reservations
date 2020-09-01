@@ -21,6 +21,11 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> 'espace-delvaux-la-venerie',
                 'bookable'=> true,
                 'price'=> 8.50,
+                'artistTypes'=>[
+                    'Daniel-Marcelin-auteur',
+                    'Daniel-Marcelin-scénographe',
+                    'Daniel-Marcelin-comédien',
+                ],
                 'category'=> 'Comédie',
             ],
             [
@@ -31,6 +36,11 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> 'dexia-art-center',
                 'bookable'=> true,
                 'price'=> 9.00,
+                'artistTypes'=>[
+                    'Daniel-Marcelin-auteur',
+                    'Daniel-Marcelin-scénographe',
+                    'Daniel-Marcelin-comédien',
+                ],
                 'category'=> 'Drame',
             ],
             [
@@ -41,6 +51,11 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> null,
                 'bookable'=> false,
                 'price'=> 5.50,
+                'artistTypes'=>[
+                    'Daniel-Marcelin-auteur',
+                    'Daniel-Marcelin-scénographe',
+                    'Daniel-Marcelin-comédien',
+                ],
                 'category'=> 'Familiale',
             ],
             [
@@ -51,6 +66,11 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
                 'location_slug'=> 'la-samaritaine',
                 'bookable'=> true,
                 'price'=> 10.50,
+                'artistTypes'=>[
+                    'Daniel-Marcelin-auteur',
+                    'Daniel-Marcelin-scénographe',
+                    'Daniel-Marcelin-comédien',
+                ],
                 'category'=> 'Comédie',
             ],
         ];
@@ -73,6 +93,10 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
             $show->setPrice($record['price']);
             $show->setCategory($this->getReference($record['category']));
 
+            foreach ($record['artistTypes'] as $artistTypes) {
+                $show->addArtistType($this->getReference($artistTypes));
+            }
+
             $this->addReference($show->getSlug(), $show);
 
             $manager->persist($show);
@@ -85,7 +109,6 @@ class ShowFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies() {
         return [
             LocationFixtures::class,
-            CategoryFixtures::class,
         ];
     }
 }

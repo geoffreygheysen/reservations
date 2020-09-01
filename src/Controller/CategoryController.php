@@ -89,6 +89,8 @@ class CategoryController extends AbstractController
      */
     public function delete(Request $request, Category $category): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', NULL, 'Accès interdit');
+
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($category);

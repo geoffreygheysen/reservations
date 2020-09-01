@@ -66,7 +66,7 @@ class Location
 
     public function __construct()
     {
-        $this->shows = new ArrayCollection();
+        $this->bookable = new ArrayCollection();
         $this->representations = new ArrayCollection();
     }
 
@@ -147,6 +147,11 @@ class Location
         return $this;
     }
 
+    public function _toString()
+    {
+        return $this->location;
+    }
+
     /**
      * @return Collection|Show[]
      */
@@ -157,8 +162,8 @@ class Location
 
     public function addShow(Show $show): self
     {
-        if (!$this->shows->contains($show)) {
-            $this->shows[] = $show;
+        if (!$this->bookable->contains($shows)) {
+            $this->bookable[] = $shows;
             $show->setLocation($this);
         }
 
@@ -167,8 +172,8 @@ class Location
 
     public function removeShow(Show $show): self
     {
-        if ($this->shows->contains($show)) {
-            $this->shows->removeElement($show);
+        if ($this->bookable->contains($show)) {
+            $this->bookable->removeElement($show);
             // set the owning side to null (unless already changed)
             if ($show->getLocation() === $this) {
                 $show->setLocation(null);
@@ -207,5 +212,9 @@ class Location
         }
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->designation;
     }
 }

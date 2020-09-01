@@ -183,7 +183,12 @@ class Utilisateur implements UserInterface
     public function getSalt() {}
 
     public function getRoles() {
-        return ['ROLE_USER'];
+        $role = $this->role->getRole();
+        
+        return array_unique([
+            "ROLE_USER",
+            "ROLE_".strtoupper($role)
+        ]);
     }
 
     /**
@@ -215,6 +220,10 @@ class Utilisateur implements UserInterface
         }
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->firstname.' '.$this->lastname;
     }
 
 }

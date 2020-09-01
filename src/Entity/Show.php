@@ -70,7 +70,7 @@ class Show
     private $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity=ArtistType::class, inversedBy="shows")
+     * @ORM\ManyToMany(targetEntity=ArtistType::class, inversedBy = "shows")
      */
     private $artistTypes;
 
@@ -200,18 +200,6 @@ class Show
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     /**
      * @return Collection|ArtistType[]
      */
@@ -234,6 +222,18 @@ class Show
         if ($this->artistTypes->contains($artistType)) {
             $this->artistTypes->removeElement($artistType);
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

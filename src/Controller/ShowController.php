@@ -5,26 +5,29 @@ namespace App\Controller;
 use App\Entity\Show;
 use App\Form\ShowType;
 use App\Entity\Category;
+use Cocur\Slugify\Slugify;
 use App\Repository\ShowRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Reservation;
+use App\Form\ReservationType;
 
 
 class ShowController extends AbstractController
 {
     /**
-     * @Route("/show", name="show")
+     * @Route("/show", name="show", methods={"GET"})
      */
-    public function index()
+    public function index(ShowRepository $showRepository): Response
     {
-        $repository = $this->getDoctrine()->getRepository(Show::class);
-        $shows = $repository->findAll();
-
+        $repository = $this->getDoctrine()->getManager()->getRepository(Category::class);
+        $categories = $repository->findAll();
+                
         return $this->render('show/index.html.twig', [
-            'shows' => $shows,
-            'ressource' => 'spectacles',
+            'shows' => $showRepository->findAll(),
+            'categories' => $categories,
         ]);
     }
 
@@ -82,7 +85,7 @@ class ShowController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}/flip_bookable", name="show_flip_bookable", methods={"POST"})
+     * @Route("/show/{id}/flip_bookable", name="show_flip_bookable", methods={"GET", "POST"})
      */
     public function flipBookable(Request $request, Show $show): Response
     {
@@ -103,24 +106,42 @@ class ShowController extends AbstractController
         return $response;
     }
 
-    /**
+        /**
      * @Route("/show/{id}", name="show_show")
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Show::class);
         $show = $repository->find($id);
 
-        //recuperer les artistes du spectacle et les grouper par type
         $collaborateurs = [];
-
-        foreach ($show->getArtistTypes() as $at) {
+        
+        foreach($show->getArtistTypes() as $at) {
             $collaborateurs[$at->getType()->getType()][] = $at->getArtist();
         }
+        
+        //Gestion de la réservation d'une représentation
+        $reservation = new Reservation();
+        
+        $form = $this->createForm(ReservationType::class,$reservation);
 
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+           //Associer l'utilisateur en cours à la réservation
+           $reservation->setUtilisateur($this->getUser());
+           
+           //Redirection vers Reservation.pay
+           //$this->redirectToRoute('reservation_pay',['reservation'=>$reservation]);
+           return $this->render('reservation/pay.html.twig', [
+            'reservation' => $reservation,
+        ]);
+        }
+        
         return $this->render('show/show.html.twig', [
             'show' => $show,
-            'collaborateurs'=> $collaborateurs,
+            'collaborateurs' => $collaborateurs,
+            'formReservation' => $form->createView(),
         ]);
     }
 
@@ -161,6 +182,6 @@ class ShowController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('show');
+        return $this->redirectToRoute('home');
     }
 }

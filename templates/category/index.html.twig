@@ -19,7 +19,12 @@
 
     {% for category in categories %}
         <tr>
-            <td><strong>{{ category.category }}</strong> <a href="{{ path('category_edit', {'id': category.id}) }}">edit</a></td>
+        
+            <td><strong>{{ category.category }}</strong> 
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('category_edit', {'id': category.id}) }}">edit</a>
+            {% endif %}
+            </td>
 
             <td>
                 <ul>
@@ -47,7 +52,7 @@
     </tbody>
 </table>
 {% endif %}
-
+{% if is_granted('ROLE_ADMIN') %}
 <a href="{{ path('category_new') }}" class="btn btn-primary">Create new</a>
-
+{% endif %}
 {% endblock %}
